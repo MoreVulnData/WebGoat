@@ -1,0 +1,31 @@
+name: Konvu
+
+on:
+  # Scan changed files in PRs (diff-aware scanning):
+  pull_request:
+    branches: ["main", "master"]
+
+  # Scan mainline branches and report all findings:
+  push:
+    branches: ["main", "master"]
+
+  # Schedule your job:
+  schedule:
+    - cron: '11 22 * * *' # Scans every day at 22:11 UTC.
+
+  # Manual trigger from github action UI
+  workflow_dispatch:
+
+jobs:
+  konvu:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '17' ] # your java version
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: KonvuTeam/konvu-github-action@latest
+        with:
+          konvu-token: ${{ secrets.KONVU_TOKEN }}
+          konvu-alpha-dl-secret: ${{ secrets.KONVU_ALPHA_DL_SECRET }}
