@@ -26,6 +26,8 @@ import static org.owasp.webgoat.container.assignments.AttackResultBuilder.failed
 import static org.owasp.webgoat.container.assignments.AttackResultBuilder.success;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.XppDriver;
+import java.io.StringReader;
 import org.apache.commons.lang3.StringUtils;
 import org.owasp.webgoat.container.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.container.assignments.AssignmentHints;
@@ -57,7 +59,8 @@ public class VulnerableComponentsLesson implements AssignmentEndpoint {
                 .replace("> ", ">")
                 .replace(" <", "<");
       }
-      contact = (Contact) xstream.fromXML(payload);
+      var reader = new XppDriver().createReader(new StringReader(payload));
+      contact = (Contact) xstream.unmarshal(reader, null, null);
     } catch (Exception ex) {
       return failed(this).feedback("vulnerable-components.close").output(ex.getMessage()).build();
     }
