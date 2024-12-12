@@ -28,7 +28,8 @@ jobs:
                     set -e
                     curl -L -O -u "konvu-alpha:${{ secrets.KONVU_ALPHA_DL_SECRET }}" https://download.konvu.com/binary/amd64/konvu-ebpf
                     chmod +x konvu-ebpf
-                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com ./konvu-ebpf -reporter-interval 5s -samples-per-second 200 & > /tmp/konvu.logs
+                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com ./konvu-ebpf -reporter-interval 5s -samples-per-second 200 > /tmp/konvu.logs &
+                    sleep 5
                     head /tmp/konvu.logs
             # Uses an default action to checkout the code
             -   uses: actions/checkout@v4.1.6
