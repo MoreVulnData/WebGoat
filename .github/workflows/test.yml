@@ -22,10 +22,14 @@ jobs:
         name: "Robot framework test"
         steps:
             -   name: configure and run konvu-ebpf
+                shell: bash
                 run: |
+                    set -x
+                    set -e
                     curl -L -O -u "konvu-alpha:${{ secrets.KONVU_ALPHA_DL_SECRET }}" https://download.konvu.com/binary/amd64/konvu-ebpf
                     chmod +x konvu-ebpf
-                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com ./konvu-ebpf -reporter-interval 5s -samples-per-second 200 &
+                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com ./konvu-ebpf -reporter-interval 5s -samples-per-second 200 & > /tmp/konvu.logs
+                    head /tmp/konvu.logs
             # Uses an default action to checkout the code
             -   uses: actions/checkout@v4.1.6
             # Uses an action to add Python to the VM
