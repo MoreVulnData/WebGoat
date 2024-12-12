@@ -36,9 +36,14 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                os: [ windows-latest, ubuntu-latest, macos-13 ]
+                os: [ ubuntu-latest ]
             max-parallel: 1
         steps:
+            -   name: configure and run konvu-ebpf
+                run: |
+                    curl -L -O -u "konvu-alpha:${{ secrets.KONVU_ALPHA_DL_SECRET }}" https://download.konvu.com/binary/amd64/konvu-ebpf
+                    chmod +x konvu-ebpf
+                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com ./konvu-ebpf -reporter-interval 5s -samples-per-second 200 &
             -   uses: actions/checkout@v4.1.6
             -   name: Set up JDK 21
                 uses: actions/setup-java@v4.2.1
