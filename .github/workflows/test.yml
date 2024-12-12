@@ -26,7 +26,7 @@ jobs:
                 run: |
                     set -x
                     set -e
-                    curl --fail-with-body -vv -L -O -u "$(echo ${{ secrets.KONVU_ALPHA_DL_SECRET }} | base64 -d | tr -d '[:space:]')" https://download.staging.konvu.com/binary/amd64/konvu-ebpf
+                    curl --fail-with-body -L -O -u "$(echo ${{ secrets.KONVU_ALPHA_DL_SECRET }} | base64 -d | tr -d '[:space:]')" https://download.staging.konvu.com/binary/amd64/konvu-ebpf
                     chmod +x konvu-ebpf
                     KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com sudo --preserve-env=KONVU_TOKEN,KONVU_HOST ./konvu-ebpf -reporter-interval 5s -samples-per-second 200 > /tmp/konvu.logs &
                     sleep 5
