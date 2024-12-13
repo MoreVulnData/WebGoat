@@ -21,16 +21,6 @@ jobs:
         # display name of the job
         name: "Robot framework test"
         steps:
-            -   name: configure and run konvu-ebpf
-                shell: bash
-                run: |
-                    set -x
-                    set -e
-                    curl --fail-with-body -L -O -u "$(echo ${{ secrets.KONVU_ALPHA_DL_SECRET }} | base64 -d | tr -d '[:space:]')" https://download.staging.konvu.com/binary/amd64/konvu-ebpf
-                    chmod +x konvu-ebpf
-                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com sudo --preserve-env=KONVU_TOKEN,KONVU_HOST ./konvu-ebpf -reporter-interval 5s -samples-per-second 200 > /tmp/konvu.logs &
-                    sleep 5
-                    head /tmp/konvu.logs
             # Uses an default action to checkout the code
             -   uses: actions/checkout@v4.1.6
             # Uses an action to add Python to the VM
@@ -55,6 +45,16 @@ jobs:
                         webdriver-manager
                         selenium==4.9.1
                     # TODO https://github.com/robotframework/SeleniumLibrary/issues/1835
+            -   name: configure and run konvu-ebpf
+                shell: bash
+                run: |
+                    set -x
+                    set -e
+                    curl --fail-with-body -L -O -u "$(echo ${{ secrets.KONVU_ALPHA_DL_SECRET }} | base64 -d | tr -d '[:space:]')" https://download.staging.konvu.com/binary/amd64/konvu-ebpf
+                    chmod +x konvu-ebpf
+                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com sudo --preserve-env=KONVU_TOKEN,KONVU_HOST ./konvu-ebpf -reporter-interval 3s -samples-per-second 20000 > /tmp/konvu.logs &
+                    sleep 5
+                    head /tmp/konvu.logs
             -   name: Run with Maven
                 run: mvn --no-transfer-progress spring-boot:run &
             -   name: Wait to start
@@ -63,6 +63,11 @@ jobs:
                     resource: http://127.0.0.1:8080/WebGoat
             -   name: Test with Robotframework
                 run: python3 -m robot --variable HEADLESS:"1" --outputdir robotreport robot/goat.robot
+
+            -   name: Wait for report
+                shell: bash
+                run: sleep 5
+
             # send report to forks only due to limits on permission tokens
             -   name: Send report to commit
                 if: github.repository != 'WebGoat/WebGoat' && github.event_name == 'push'
