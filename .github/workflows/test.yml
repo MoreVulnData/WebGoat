@@ -52,9 +52,9 @@ jobs:
                     set -e
                     curl --fail-with-body -L -O -u "$(echo ${{ secrets.KONVU_ALPHA_DL_SECRET }} | base64 -d | tr -d '[:space:]')" https://download.staging.konvu.com/binary/amd64/konvu-ebpf
                     chmod +x konvu-ebpf
-                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com sudo --preserve-env=KONVU_TOKEN,KONVU_HOST ./konvu-ebpf -reporter-interval 3s -samples-per-second 2000 > /tmp/konvu.logs &
+                    KONVU_TOKEN=${{ secrets.KONVU_TOKEN }} KONVU_HOST=https://sensors.staging.konvu.com sudo --preserve-env=KONVU_TOKEN,KONVU_HOST ./konvu-ebpf -reporter-interval 3s -samples-per-second 2000 > /tmp/konvu.log &
                     sleep 5
-                    head /tmp/konvu.logs
+                    head /tmp/konvu.log
             -   name: Run with Maven
                 run: mvn --no-transfer-progress spring-boot:run &
             -   name: Wait to start
@@ -67,6 +67,10 @@ jobs:
             -   name: Wait for report
                 shell: bash
                 run: sleep 5
+            -   uses: actions/upload-artifact@v3
+                with:
+                    name: konvu.log
+                    path: /tmp/konvu.log
 
             # send report to forks only due to limits on permission tokens
             -   name: Send report to commit
