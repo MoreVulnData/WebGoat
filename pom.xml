@@ -218,6 +218,17 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <!-- Konvu test seed: a PRIVATE artifact (only in the Konvu Sail/JFrog test
+         registry, not on Maven Central) that transitively pulls a vulnerable
+         public dep (commons-collections:3.2.1, CVE-2015-6420). Konvu can only
+         discover that transitive by fetching this artifact's POM from the
+         private registry, so the finding stays unresolved until the Maven
+         private-registry integration is configured. -->
+    <dependency>
+      <groupId>com.konvutest</groupId>
+      <artifactId>private-lib</artifactId>
+      <version>1.0.0</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-exec</artifactId>
