@@ -1,6 +1,6 @@
 {
   "name": "konvu-js-sinks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Reachable/exploitable JS dependency vulnerabilities for Konvu SCA testing. Each Express route feeds request input into a vulnerable library sink.",
   "main": "server.js",
