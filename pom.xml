@@ -94,7 +94,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
     <waittimeForServerStart>60</waittimeForServerStart>
-    <webdriver.version>5.9.2</webdriver.version>
+    <webdriver.version>6.3.4</webdriver.version>
     <webgoat.context>/</webgoat.context>
     <webgoat.sslenabled>false</webgoat.sslenabled>
     <webjars-locator-core.version>0.59</webjars-locator-core.version>
