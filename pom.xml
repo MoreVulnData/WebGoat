@@ -233,6 +233,35 @@
       <artifactId>private-lib</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <!-- Konvu test seed: directly-declared PUBLIC vulnerable dependencies. Each is
+         a real CVE on a real Maven Central artifact and is made reachable from an
+         HTTP endpoint in org.owasp.webgoat.lessons.konvu (*SinkController.java),
+         so both Dependabot and Konvu's SCA reachability flag them as exploitable. -->
+    <dependency> <!-- CVE-2016-2510 (BeanShell eval RCE) -->
+      <groupId>org.apache-extras.beanshell</groupId>
+      <artifactId>bsh</artifactId>
+      <version>2.0b5</version>
+    </dependency>
+    <dependency> <!-- CVE-2021-42392 (H2 JDBC/JNDI RCE) -->
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.199</version>
+    </dependency>
+    <dependency> <!-- CVE-2022-45688 (org.json XML.toJSONObject DoS) -->
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20131018</version>
+    </dependency>
+    <dependency> <!-- CVE-2022-1471 (SnakeYAML unsafe load RCE) -->
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>1.30</version>
+    </dependency>
+    <dependency> <!-- CVE-2015-7501 (commons-collections4 InvokerTransformer RCE) -->
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>4.0</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-exec</artifactId>
