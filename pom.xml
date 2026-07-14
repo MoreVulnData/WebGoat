@@ -218,19 +218,16 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
-    <!-- Konvu test seed (mirrors the Sage case). A PUBLIC vulnerable dep that
-         Dependabot can see (commons-collections:3.2.1, CVE-2015-6420) is declared
-         directly, so the SCA finding is created on sync. It is exercised only via
-         com.konvutest:private-lib — a PRIVATE artifact that lives only in the Konvu
-         Sail/JFrog test registry — so Konvu's qualification must download private-lib
-         to judge reachability. Without the Maven private-registry integration that
-         download 404s and the finding sits in "Failed" (exactly Sage's state); with
-         it, qualification completes to an exploitable verdict. -->
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>3.2.1</version>
-    </dependency>
+    <!-- Konvu test seed (mirrors the Sage case). com.konvutest:private-lib is a
+         PRIVATE artifact that lives only in the Konvu Sail/JFrog test registry.
+         Its POM pulls the vulnerable commons-collections:3.2.1 (CVE-2015-6420),
+         so that CVE is reachable ONLY as a transitive of private-lib — it is NOT
+         declared directly here. Konvu's scanner must resolve private-lib through
+         the Maven private-registry integration to even see commons-collections,
+         which is why the dependency tree shows webgoat -> private-lib ->
+         commons-collections, and why qualification (which downloads private-lib to
+         judge reachability) 404s without the integration and completes to an
+         exploitable verdict with it. -->
     <dependency>
       <groupId>com.konvutest</groupId>
       <artifactId>private-lib</artifactId>
